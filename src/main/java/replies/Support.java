@@ -3,6 +3,7 @@ package replies;
 import java.util.List;
 
 // provides supportive messages
+// TODO: add more messages
 public class Support implements Reply {
 	private static final List<String> HUG_EMOJIS = 
 		List.of("<:kateHug:377953817146294284>", "<:fullyHug:379761939749928973>", "<:cirLove:377616373448310788>");

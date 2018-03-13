@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // provides bot behaviour
-// TODO: imitate Mia by recording all of her messages and doing some machine learning magic
+// TODO: imitate victim by recording all of their messages and doing some machine learning magic
 public class Bot implements IListener<MessageReceivedEvent> {
 	private IDiscordClient client;
 	private IUser victim;
@@ -37,8 +37,7 @@ public class Bot implements IListener<MessageReceivedEvent> {
 		// register this bot as an event listener
 		client.getDispatcher().registerListener(this);
 		
-		// get Mia
-		victim = client.getUsersByName(VICTIM, false).get(0);
+		victim = client.getUsersByName(VICTIM, true).get(0);
 		
 		// get the tagger on a separate thread
 		new Thread(this::randomAnnoy).start();
@@ -48,7 +47,7 @@ public class Bot implements IListener<MessageReceivedEvent> {
 		return (int) (2 * Math.random() * FUZZ_HOURS) + HOURS_UNTIL_TAGGING - FUZZ_HOURS;
 	}
 	
-	// One way of annoying Mia is by randomly tagging her in a message every once in a while.
+	// One way of annoying victim is by randomly tagging her in a message every once in a while.
 	private void randomAnnoy() {
 		while (true) {
 			if (lastTagged == null || 
@@ -72,7 +71,7 @@ public class Bot implements IListener<MessageReceivedEvent> {
 	
 	private void annoyVictim(IChannel channel) {
 		if (Math.random() > 0.5) {
-			// annoy Mia by repeatedly tagging her
+			// annoy victim by repeatedly tagging them
 			List<String> tags = new ArrayList<>();
 			for (int i = 0; i <= Math.random() * TAG_LIMIT; i++)
 				tags.add(victim.mention(Math.random() > 0.5));
@@ -103,7 +102,7 @@ public class Bot implements IListener<MessageReceivedEvent> {
 			.build();
 	}
 	
-	// The other way of annoying Mia is by replying almost immediately to her and tagging her
+	// The other way of annoying victim is by replying almost immediately to her and tagging her
 	@Override
 	public void handle(MessageReceivedEvent event) {
 		IMessage message = event.getMessage();

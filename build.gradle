@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'idea'
 	// Allows running "gradle shadowJar" to create an executable JAR of your project
-	id 'com.github.johnrengelman.shadow' version '2.0.0'
+	id 'com.github.johnrengelman.shadow' version '2.0.2'
 }
 
 group 'org.dartanon'
@@ -19,4 +19,10 @@ repositories {
 
 dependencies {
 	compile 'com.github.austinv11:Discord4J:2.10.0'
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'Bot'
+	}
 }
