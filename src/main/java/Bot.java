@@ -1,13 +1,13 @@
-import replies.Reply;
-import replies.ReplyFactory;
+import reply.ReplyFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.MessageBuilder;
+import sx.blah.discord.util.RequestBuffer;
 import util.Load;
+import util.Pick;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -81,7 +81,7 @@ public class Bot implements IListener<MessageReceivedEvent> {
 	}
 	
 	private IChannel pickRandomChannel() {
-		String randomChannel = Reply.pickRandom(CHANNELS);
+		String randomChannel = Pick.random(CHANNELS);
 		return client.getChannels(true).stream()
 			.filter(ch -> ch.getName().equals(randomChannel))
 			.findFirst()
@@ -96,10 +96,8 @@ public class Bot implements IListener<MessageReceivedEvent> {
 	// TODO: figure out why some strings are not being sent (it even crashes), including "_ _", "~", and "!"
 	private void sendMessage(IChannel channel, String message) {
 		System.out.println("Sending message: "+message+", channel: "+channel.getName()+", @"+LocalDateTime.now());
-		new MessageBuilder(client)
-			.withChannel(channel)
-			.withContent(message)
-			.build();
+		// buffer the message so we don't get rate limited
+		RequestBuffer.request(() -> channel.sendMessage(message));
 	}
 	
 	// The other way of annoying victim is by replying almost immediately to her and tagging her
